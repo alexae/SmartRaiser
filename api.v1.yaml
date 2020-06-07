@@ -1,0 +1,175 @@
+openapi: 3.0.0
+info:
+  title: api
+  version: '1.0'
+servers:
+  - url: 'http://localhost:5000'
+paths:
+  /running:
+    get:
+      summary: Get current status
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isRunning:
+                    type: boolean
+      operationId: get-running
+    put:
+      summary: Set current status
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: put-running
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isRunning:
+                  type: boolean
+  /humidity:
+    get:
+      summary: Get current humidity
+      tags: []
+      responses:
+        '200':
+          description: OK
+        '':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  humidity:
+                    type: integer
+          description: ''
+      operationId: get-humidity
+    put:
+      summary: Set humidity to achieve
+      tags: []
+      operationId: put-humidity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                humidity:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+  /waterlevel:
+    get:
+      summary: Get current water level
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  waterLevel:
+                    type: integer
+      operationId: get-waterlevel
+  /chargeelevel:
+    get:
+      summary: Get current charge level
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chargeLevel:
+                    type: integer
+      operationId: get-chargeelevel
+  /wateringtime:
+    get:
+      summary: Get the allowed watering times
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  wateringTimes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        from:
+                          type: string
+                        to:
+                          type: string
+      operationId: get-wateringtime
+    put:
+      summary: Set the allowed watering times
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: put-wateringtime
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wateringTimes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      from:
+                        type: string
+                      to:
+                        type: string
+  /baseconfig:
+    get:
+      summary: Get base config
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ip:
+                    type: string
+      operationId: get-baseconfig
+    post:
+      summary: Set base config
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: post-baseconfig
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ip:
+                  type: string
+components:
+  schemas: {}
