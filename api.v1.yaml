@@ -82,7 +82,7 @@ paths:
                   waterLevel:
                     type: integer
       operationId: get-waterlevel
-  /chargeelevel:
+  /chargelevel:
     get:
       summary: Get current charge level
       tags: []
@@ -96,7 +96,7 @@ paths:
                 properties:
                   chargeLevel:
                     type: integer
-      operationId: get-chargeelevel
+      operationId: get-chargelevel
   /wateringtime:
     get:
       summary: Get the allowed watering times
