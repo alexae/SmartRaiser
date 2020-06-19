@@ -1,51 +1,67 @@
-from flask import Flask
-from markupsafe import escape
-from flask import jsonify
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api
 
 app = Flask(__name__)
-#Statische Werte zum Testen der API -> Löschen nach ferigstellung
-OnOff = True            #boolean
-humidity = 40           #Int
-waterlevel = 0          #int
-chargelevel = 0         #Int
-wateringtime = 00:05    #String mm:ss
+api = Api(app)
 
-# Bis hier löschen
+class running(Resource):
+    def get(self):
+        status_on_off=StatusOnOff
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'isRunning': status_on_off}
+    def put(self):
+        OnOff = request.form['is_running']
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'is_running': OnOff}
+api.add_resource(running, '/running')
 
-@app.route('/running', methods=['GET', 'PUT'])
-def running():
-    # Programm Code hier einfügen
-    #
-    #
-    return OnOff
 
-@app.route('/humidity' , methods=['GET', 'PUT'])
-def humidity():
-    # Programm Code hier einfügen
-    #
-    #
-    return humidity
+class humidity(Resource):
+    def get(self):
+        status_humidity=StatusHumidity
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'humidity': status_humidity}
+    def put(self):
+        val_humidity = request.form['humidity']
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'humidity': val_humidity}
+api.add_resource(humidity, '/humidity')
 
-@app.route('/waterlevel' , methods=['GET'])
-def waterlevel():
-    # Programm Code hier einfügen
-    #
-    #
-    return waterlevel
+class waterlevel(Resource):
+    def get(self):
+        status_waterlevel=StatusWaterlevel
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'waterlevel': status_waterlevel}
+api.add_resource(waterlevel, '/waterlevel')
+
+class chargelevel(Resource):
+    def get(self):
+        status_chargelevel=StatusChargelevel
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'chargelevel': status_chargelevel}
+api.add_resource(chargelevel, '/chargelevel')
+@app.route('/chargelevel' , methods=['GET'])
     
-@app.route('/chargelevel' , methods='GET')
-def chargelevel():
-    # Programm Code hier einfügen
-    #
-    #
-    return chargelevel
-    
-@app.route('/wateringtime' , methods='GET', 'PUT')
+@app.route('/wateringtime' , methods=['GET', 'PUT'])
 def wateringtime():
-    # Programm Code hier einfügen
+    # Programm Code hier einfuegen
+    wateringtime = "00:05"    #String mm:ss /loeschenwenn fertig
     #
     #
-    return wateringtime
+    return jsonify(wateringtime)
     
+   
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0")
