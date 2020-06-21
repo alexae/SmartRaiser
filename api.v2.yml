@@ -97,7 +97,7 @@ paths:
       operationId: get-chargelevel
   /wateringtime_from:
     get:
-      summary: Get the allowed watering times
+      summary: Get the allowed watering time
       tags: []
       responses:
         '200':
@@ -118,7 +118,7 @@ paths:
                           type: string
       operationId: get-wateringtime_from
     put:
-      summary: Set the allowed watering times
+      summary: Set the allowed watering time
       tags: []
       responses:
         '200':
@@ -139,49 +139,20 @@ paths:
                         type: string
                       to:
                         type: string
-/wateringtime_to:
-  get:
-    summary: Get the allowed watering times
-    tags: []
-    responses:
-      '200':
-        description: OK
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                wateringTimes:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      from:
-                        type: string
-                      to:
-                        type: string
-    operationId: get-wateringtime_to
-  put:
-    summary: Set the allowed watering times
-    tags: []
-    responses:
-      '200':
-        description: OK
-    operationId: put-wateringtime_to
-    requestBody:
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              wateringTimes:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    from:
-                      type: string
-                    to:
-                      type: string
+  wateringtime_to:
+    get:
+      summary: Get the end of allowed watering time
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
+    put:
+      summary: Set the end of allowed watering time
+      description: ''
+      operationId: ''
+      responses:
+        default:
+          description: Default error sample response
 components:
   schemas: {}

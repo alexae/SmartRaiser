@@ -16,7 +16,7 @@ class running(Resource):
         # Programm Code hier einfuegen
         #
         #
-        return {'is_running': OnOff}
+        return 204
 api.add_resource(running, '/running')
 
 
@@ -32,7 +32,8 @@ class humidity(Resource):
         # Programm Code hier einfuegen
         #
         #
-        return {'humidity': val_humidity}
+        print(val_humidity)
+        return 204
 api.add_resource(humidity, '/humidity')
 
 class waterlevel(Resource):
@@ -52,16 +53,27 @@ class chargelevel(Resource):
         #
         return {'chargelevel': status_chargelevel}
 api.add_resource(chargelevel, '/chargelevel')
-@app.route('/chargelevel' , methods=['GET'])
     
-@app.route('/wateringtime' , methods=['GET', 'PUT'])
-def wateringtime():
-    # Programm Code hier einfuegen
-    wateringtime = "00:05"    #String mm:ss /loeschenwenn fertig
-    #
-    #
-    return jsonify(wateringtime)
-    
+class wateringtime(Resource):
+    def get(self):
+        status_wateringtime_from='11:00'
+        status_wateringtime_to='11:00'
+        #StatusWateringtimeFrom
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'from': status_wateringtime_from, 'to': status_wateringtime_to}
+    def put(self):
+        val_wateringtime_from = request.form['from']
+        val_wateringtime_to = request.form['to']
+        # Programm Code hier einfuegen
+        #
+        #
+        print(val_wateringtime_from)
+        print(val_wateringtime_to)
+        return 204
+api.add_resource(wateringtime, '/wateringtime')
+
    
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0")
