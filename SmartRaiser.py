@@ -54,26 +54,37 @@ class chargelevel(Resource):
         return {'chargelevel': status_chargelevel}
 api.add_resource(chargelevel, '/chargelevel')
     
-class wateringtime(Resource):
+class wateringtime_from(Resource):
     def get(self):
-        status_wateringtime_from='11:00'
-        status_wateringtime_to='11:00'
-        #StatusWateringtimeFrom
+        status_wateringtime_from=StatusWateringtime  #StatusWateringtimeFrom
         # Programm Code hier einfuegen
         #
         #
-        return {'from': status_wateringtime_from, 'to': status_wateringtime_to}
+        return {'from': status_wateringtime_from}
     def put(self):
         val_wateringtime_from = request.form['from']
+        # Programm Code hier einfuegen
+        #
+        #
+        print(val_wateringtime_from)  #Status ausgabe des Werts
+        return 204
+api.add_resource(wateringtime, '/wateringtime_from')
+
+class wateringtime_to(Resource):
+    def get(self):
+        status_wateringtime_to=StatusWateringtimeTo  #StatusWateringtimeTo
+        # Programm Code hier einfuegen
+        #
+        #
+        return {'to': status_wateringtime_to}
+    def put(self):
         val_wateringtime_to = request.form['to']
         # Programm Code hier einfuegen
         #
         #
-        print(val_wateringtime_from)
-        print(val_wateringtime_to)
+        print(val_wateringtime_to)  #Status ausgabe des Werts
         return 204
-api.add_resource(wateringtime, '/wateringtime')
-
+api.add_resource(wateringtime, '/wateringtime_to')
    
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0")

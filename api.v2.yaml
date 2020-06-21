@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: api
-  version: '1.0'
+  version: '2.0'
 servers:
   - url: 'http://localhost:5000'
 paths:
@@ -108,13 +108,9 @@ paths:
                 type: object
                 properties:
                   wateringTimes:
-                    type: array
-                    items:
-                      type: object
-                      properties:
+                    type: object
+                    properties:
                         from:
-                          type: string
-                        to:
                           type: string
       operationId: get-wateringtime_from
     put:
@@ -131,28 +127,45 @@ paths:
               type: object
               properties:
                 wateringTimes:
-                  type: array
-                  items:
-                    type: object
-                    properties:
+                  type: object
+                  properties:
                       from:
                         type: string
-                      to:
-                        type: string
-  wateringtime_to:
+  /wateringtime_to:
     get:
       summary: Get the end of allowed watering time
-      description: ''
-      operationId: ''
+      tags: []
       responses:
-        default:
-          description: Default error sample response
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    wateringTimes:
+                      type: object
+                      properties:
+                          from:
+                            type: string
+      operationId: get-wateringtime_to
     put:
       summary: Set the end of allowed watering time
-      description: ''
-      operationId: ''
+      tags: []
       responses:
-        default:
-          description: Default error sample response
+        '200':
+          description: OK
+      operationId: put-wateringtime_to
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                wateringTimes:
+                  type: object
+                  properties:
+                      to:
+                        type: string
 components:
   schemas: {}
