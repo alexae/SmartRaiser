@@ -56,7 +56,7 @@ api.add_resource(chargelevel, '/chargelevel')
     
 class wateringtime_from(Resource):
     def get(self):
-        status_wateringtime_from=StatusWateringtime  #StatusWateringtimeFrom
+        status_wateringtime_from='10:00'  #Durch Variable ersetzen
         # Programm Code hier einfuegen
         #
         #
@@ -68,11 +68,11 @@ class wateringtime_from(Resource):
         #
         print(val_wateringtime_from)  #Status ausgabe des Werts
         return 204
-api.add_resource(wateringtime, '/wateringtime_from')
+api.add_resource(wateringtime_from, '/wateringtime_from')
 
 class wateringtime_to(Resource):
     def get(self):
-        status_wateringtime_to=StatusWateringtimeTo  #StatusWateringtimeTo
+        status_wateringtime_to='11:30'  #Durch Variable ersetzen
         # Programm Code hier einfuegen
         #
         #
@@ -84,7 +84,7 @@ class wateringtime_to(Resource):
         #
         print(val_wateringtime_to)  #Status ausgabe des Werts
         return 204
-api.add_resource(wateringtime, '/wateringtime_to')
+api.add_resource(wateringtime_to, '/wateringtime_to')
    
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0")
