@@ -3,7 +3,6 @@ from flask import Flask, jsonify, request
 import shelve
 import time
 import datetime
-import dbm
 import json
 import RPi.GPIO as GPIO
 from MCP3008 import MCP3008   #SPI_API
@@ -35,18 +34,17 @@ def index():
     return 'SmartRaiser is running!'
 
 
-@app.route('/humidity')
-def handle_humidity():
+@app.route('/humidity', methods=['GET'])
+def handle_humidity(humidity='100'):
     # Read current humidity from sensor
     adc = MCP3008()
     value = adc.read( channel = 1 ) # Den auszulesenden Channel kannst du natürlich anpassen
     humidity=value / 1023.0 * 3.3
-    print(humidity)
     return jsonify(
         humidity
-    )
+    ), humidity
 
-@app.route('/waterlevel')
+@app.route('/waterlevel', methods=['GET'])
 def handle_waterlevel():
     # Read current water level from sensor
     # setze Trigger auf HIGH
@@ -74,9 +72,9 @@ def handle_waterlevel():
     distanz = (TimeElapsed * 34300) / 2
     return jsonify(
         waterlevel=distanz
-    )
+    ), distanz
    
-@app.route('/chargelevel')
+@app.route('/chargelevel', methods=['GET'])
 def handle_chargelevel():
     # Read current charge level from sensor
     if GPIO.input(17) == GPIO.HIGH:
@@ -91,7 +89,7 @@ def handle_chargelevel():
 
 
 @app.route('/humiditytoachieve', methods=['GET', 'PUT'])
-def handle_humidity_to_achieve():
+def handle_humidity_to_achieve(humidity='42'):
     if request.method == 'PUT':
         content = request.json
         humidity = content['humidity']
@@ -108,7 +106,7 @@ def handle_humidity_to_achieve():
         if 'humidity' in data:
             return jsonify(
                 humidity=data['humidity']
-            )
+            ), humidity
         else:
             return "", 204
 
@@ -138,43 +136,61 @@ def handle_wateringtimes():
             return jsonify(
                 wateringtimes=data['wateringtimes']
             )
-            json.loads(wateringtimes)
+            json.loads(wateringtimes) , wateringtimes
         else:
             return "", 204
 
         data.close()
 def watering():
     #Bestimmen der Statischen Parameter
-    #Waeserungsdauer und Messdauer in min (umrechnung in ms)
-    wateringduration = 3 # * 60 *1000 Umrechnung in Minuten
-    messuringtime = 5 # * 60 * 1000 Umrechnung in Minuten
+    #Waeserungsdauer und Messdauer in Min
+    wateringduration = 3
+    messuringtime = 5
+    waterlevel_min = 5.0
+    #Umrechnung in Minuten in ms    !!!! Zu Testzwecken auskommentiert, sonst dauert das zu lange! ;) !!!!!!
+    wateringduration_in_ms = wateringduration # * 60 *1000
+    messuringtime_in_ms = messuringtime # * 60 * 1000
 
-    data = shelve.open('wateringtimes')
+    #Auslesen der aktuellen Feuchtigkeit und des Wasertankstands
+    HA  = handle_humidity()
+    HAi = int(HA[1])
+    WTL = handle_waterlevel()
+    
+    #Auslesen der aktuellen Zeit
+    timenow =(datetime.datetime.now().strftime("%H:%M"))
+
+    #Auslesen der Feuchtigkeit welche erreicht werden soll
+    data = shelve.open('humidity')
+    if 'humidity' in data:
+        HS=data['humidity']
+        data.close()
+    wateringtoachieve = int(HS['humidity'])
     #Auslesen der Bewässerungszeit
+    data = shelve.open('wateringtimes')
     if 'wateringtimes' in data:
         WT=data['wateringtimes']
         data.close()
-    #Auslesen der aktuellen Zeit
-        timenow =(datetime.datetime.now().strftime("%H:%M"))
+    wateringfrom = (WT['from'])
+    wateringto = (WT['to'])
 
     #Bewässerungslogik
-        wateringfrom = (WT["from"])
-        wateringto = (WT["to"])
-    if timenow >= wateringfrom and timenow <= wateringto:
-        for i in range(wateringduration):
+    if timenow >= wateringfrom and timenow <= wateringto and waterlevel_min < WTL[1] and wateringtoachieve >= HAi:
+
+        for i in range(wateringduration_in_ms):
             GPIO.output(21, GPIO.HIGH)
             time.sleep(0.001)
-            print(i)
-        for i in range(messuringtime):
+            print("Bewässerung läuft")
+        for i in range(messuringtime_in_ms):
             GPIO.output(21, GPIO.LOW)
             time.sleep(0.001)
             print("Messung läuft")
+
+
     else:
-        GPIO.output(21, GPIO.LOW)
-        print("Bewässern nicht erwünscht")
-        print(timenow)
-        print("Eingestellte Bewaesserungszeiten von", WT)
-    
+            GPIO.output(21, GPIO.LOW)
+            print("Bewässern nicht erwünscht")
+            print(timenow)
+            print("Eingestellte Bewaesserungszeiten von", wateringfrom, "bis", wateringto)
 
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0")
