@@ -28,10 +28,11 @@ app = Flask(__name__)
 
 
 
+    
 @app.route('/')
 def index():
     watering()
-    return 'SmartRaiser is running!'
+    return 'SmartRaiser läuft'
 
 
 @app.route('/humidity', methods=['GET'])
@@ -184,13 +185,11 @@ def watering():
             GPIO.output(21, GPIO.LOW)
             time.sleep(0.001)
             print("Messung läuft")
-
-
+            
     else:
-            GPIO.output(21, GPIO.LOW)
-            print("Bewässern nicht erwünscht")
-            print(timenow)
-            print("Eingestellte Bewaesserungszeiten von", wateringfrom, "bis", wateringto)
+        print("Bewässerung nicht möglich")
+        print(timenow)
+        
 
 if __name__ == '__main__':
     app.run(debug=True,host="0.0.0.0")
